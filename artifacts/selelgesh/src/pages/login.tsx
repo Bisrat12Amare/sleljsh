@@ -62,7 +62,7 @@ export default function Login() {
           <div className="w-16 h-16 bg-primary text-primary-foreground rounded-2xl flex items-center justify-center text-3xl font-bold mx-auto mb-4 shadow-lg shadow-primary/20">
             ስ
           </div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Selelgesh</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">ስለ ልጅሽ</h1>
           <p className="text-muted-foreground">Your trusted child health companion</p>
         </div>
 

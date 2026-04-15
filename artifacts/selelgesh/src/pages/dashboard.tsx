@@ -54,7 +54,7 @@ export default function Dashboard() {
           <div className="w-20 h-20 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-6">
             <span className="text-4xl font-bold">ስ</span>
           </div>
-          <h2 className="text-2xl font-bold mb-2">Welcome to Selelgesh, {user?.name}!</h2>
+          <h2 className="text-2xl font-bold mb-2">Welcome to ስለ ልጅሽ, {user?.name}!</h2>
           <p className="text-muted-foreground mb-8">
             To start tracking vaccinations, growth, and nutrition, you need to add your child's profile first.
           </p>

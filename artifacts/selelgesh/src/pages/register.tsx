@@ -39,7 +39,7 @@ export default function Register() {
         onSuccess: (res) => {
           setAuth(res.token, res.user);
           setLocation("/dashboard");
-          toast({ title: "Account created!", description: "Welcome to Selelgesh." });
+          toast({ title: "Account created!", description: "Welcome to ስለ ልጅሽ." });
         },
         onError: () => {
           toast({ title: "Registration failed", description: "Something went wrong. Please try again.", variant: "destructive" });
@@ -69,7 +69,7 @@ export default function Register() {
         <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl">
           <CardHeader>
             <CardTitle>Register</CardTitle>
-            <CardDescription>Join Selelgesh to start tracking your child's health.</CardDescription>
+            <CardDescription>Join ስለ ልጅሽ to start tracking your child's health.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

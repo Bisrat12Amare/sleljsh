@@ -32,7 +32,7 @@ export function Layout({ children }: { children: ReactNode }) {
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold">
             ስ
           </div>
-          <span className="text-xl font-bold text-primary">Selelgesh</span>
+          <span className="text-xl font-bold text-primary">ስለ ልጅሽ</span>
         </div>
 
         <div className="px-6 pb-4">
@@ -105,7 +105,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-xs">
               ስ
             </div>
-            <span className="font-bold text-primary">Selelgesh</span>
+            <span className="font-bold text-primary">ስለ ልጅሽ</span>
           </div>
           
           <select 
