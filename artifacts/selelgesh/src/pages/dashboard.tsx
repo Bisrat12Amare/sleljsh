@@ -7,7 +7,7 @@ import { useGetDashboardSummary, useGetChildren } from "@workspace/api-client-re
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Syringe, MonitorSmartphone, LineChart, Apple, ArrowRight, AlertCircle } from "lucide-react";
+import { Syringe, MonitorSmartphone, LineChart, Apple, ArrowRight, AlertCircle, Lightbulb } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Dashboard() {
