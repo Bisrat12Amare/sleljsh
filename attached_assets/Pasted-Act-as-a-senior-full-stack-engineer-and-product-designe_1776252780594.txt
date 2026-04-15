@@ -1,0 +1,92 @@
+Act as a senior full-stack engineer and product designer.
+
+Build a complete MVP web + mobile-friendly application called "ስለ ልጅሽ" (Selelgesh – Smart Child Health & Digital Wellbeing Companion).
+
+TECH STACK:
+- Frontend: React (Next.js preferred)
+- Backend: Node.js with Express
+- Database: MongoDB
+- Styling: Tailwind CSS
+- Authentication: JWT-based login system
+- SMS Integration: Mock service (design structure for future integration like Twilio)
+
+DESIGN REQUIREMENTS:
+- Brand colors: Orange (primary) and Dark (black/charcoal background)
+- Clean, modern UI with simple UX for Ethiopian parents
+- Mobile-first responsive design
+- Use readable fonts (support Amharic + English)
+
+CORE FEATURES:
+
+1. USER AUTHENTICATION
+- Register/Login (Parent account)
+- Store child profile (name, age, gender)
+
+2. DASHBOARD
+- Overview of child health
+- Show reminders (vaccination, nutrition tips, screen time alerts)
+
+3. NUTRITION MODULE
+- Daily food suggestions using Ethiopian foods
+- Age-based recommendations
+- Simple UI cards (Breakfast, Lunch, Dinner)
+
+4. VACCINATION TRACKER
+- Predefined Ethiopian vaccination schedule
+- Automatic reminders
+- Status (Completed / Upcoming)
+
+5. GROWTH TRACKING
+- Input height and weight
+- Show growth chart (simple line graph)
+- Compare with normal ranges
+
+6. SCREEN TIME MONITOR
+- Input daily screen time manually
+- Alert if usage exceeds healthy limits
+- Show weekly summary
+
+7. TIPS & GUIDANCE
+- Daily parenting tips (sleep, play, habits)
+- Stored in backend and fetched via API
+
+8. SMS SUPPORT (SIMULATED)
+- Create backend structure to send SMS reminders
+- Log messages instead of real sending
+
+BACKEND REQUIREMENTS:
+- REST API for all modules
+- Proper folder structure (controllers, models, routes)
+- Use MongoDB schemas:
+  - User
+  - Child
+  - NutritionTips
+  - Vaccination
+  - GrowthRecords
+  - ScreenTime
+
+FRONTEND REQUIREMENTS:
+- Pages:
+  - Login/Register
+  - Dashboard
+  - Nutrition
+  - Vaccination
+  - Growth Tracker
+  - Screen Time
+  - Tips
+- Sidebar or bottom navigation
+- Use charts for growth tracking
+
+EXTRA:
+- Include sample Ethiopian food data
+- Include sample vaccination schedule
+- Add comments in code for clarity
+- Make the UI visually appealing using orange highlights on dark background
+
+OUTPUT:
+- Provide full project structure
+- Provide all key files (frontend + backend)
+- Include instructions to run the project locally
+
+GOAL:
+Deliver a working MVP that demonstrates the full idea of "ስለ ልጅሽ" and can be improved later into a production system.

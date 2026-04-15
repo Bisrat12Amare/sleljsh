@@ -3,13 +3,30 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Selelgesh - Smart Child Health & Digital Wellbeing Companion API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: children
+    description: Child profile operations
+  - name: nutrition
+    description: Nutrition module
+  - name: vaccinations
+    description: Vaccination tracker
+  - name: growth
+    description: Growth tracking
+  - name: screentime
+    description: Screen time monitor
+  - name: tips
+    description: Parenting tips
+  - name: dashboard
+    description: Dashboard summary
+
 paths:
   /healthz:
     get:
@@ -24,6 +41,470 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new parent account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterBody"
+      responses:
+        "201":
+          description: Registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: Bad request
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login with existing account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginBody"
+      responses:
+        "200":
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "401":
+          description: Unauthorized
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user profile
+      parameters:
+        - in: header
+          name: x-user-id
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+
+  /children:
+    get:
+      operationId: getChildren
+      tags: [children]
+      summary: Get all children for the logged-in user
+      parameters:
+        - in: header
+          name: x-user-id
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: List of children
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Child"
+    post:
+      operationId: createChild
+      tags: [children]
+      summary: Create a new child profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChildBody"
+      responses:
+        "201":
+          description: Child created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Child"
+
+  /children/{id}:
+    get:
+      operationId: getChild
+      tags: [children]
+      summary: Get a child by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Child profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Child"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateChild
+      tags: [children]
+      summary: Update child profile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateChildBody"
+      responses:
+        "200":
+          description: Updated child
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Child"
+    delete:
+      operationId: deleteChild
+      tags: [children]
+      summary: Delete child profile
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /nutrition:
+    get:
+      operationId: getNutritionTips
+      tags: [nutrition]
+      summary: Get all nutrition tips
+      parameters:
+        - in: query
+          name: ageGroup
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: List of nutrition tips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NutritionTip"
+
+  /nutrition/meal-plan:
+    get:
+      operationId: getMealPlan
+      tags: [nutrition]
+      summary: Get daily meal plan for a child
+      parameters:
+        - in: query
+          name: childId
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: ageMonths
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: Daily meal plan
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MealPlan"
+
+  /vaccinations:
+    get:
+      operationId: getVaccinations
+      tags: [vaccinations]
+      summary: Get vaccination schedule for a child
+      parameters:
+        - in: query
+          name: childId
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: List of vaccination records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vaccination"
+    post:
+      operationId: createVaccination
+      tags: [vaccinations]
+      summary: Create or update vaccination record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVaccinationBody"
+      responses:
+        "201":
+          description: Vaccination record created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vaccination"
+
+  /vaccinations/{id}:
+    patch:
+      operationId: updateVaccination
+      tags: [vaccinations]
+      summary: Mark vaccination as completed
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateVaccinationBody"
+      responses:
+        "200":
+          description: Updated vaccination
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vaccination"
+
+  /vaccinations/schedule:
+    get:
+      operationId: getVaccinationSchedule
+      tags: [vaccinations]
+      summary: Get the Ethiopian standard vaccination schedule
+      responses:
+        "200":
+          description: Standard vaccination schedule
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VaccinationScheduleItem"
+
+  /growth:
+    get:
+      operationId: getGrowthRecords
+      tags: [growth]
+      summary: Get growth records for a child
+      parameters:
+        - in: query
+          name: childId
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: List of growth records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GrowthRecord"
+    post:
+      operationId: createGrowthRecord
+      tags: [growth]
+      summary: Add a growth record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGrowthRecordBody"
+      responses:
+        "201":
+          description: Growth record created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GrowthRecord"
+
+  /growth/{id}:
+    delete:
+      operationId: deleteGrowthRecord
+      tags: [growth]
+      summary: Delete a growth record
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /screentime:
+    get:
+      operationId: getScreenTimeRecords
+      tags: [screentime]
+      summary: Get screen time records for a child
+      parameters:
+        - in: query
+          name: childId
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: List of screen time records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ScreenTimeRecord"
+    post:
+      operationId: createScreenTimeRecord
+      tags: [screentime]
+      summary: Log screen time for a child
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateScreenTimeBody"
+      responses:
+        "201":
+          description: Screen time logged
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScreenTimeRecord"
+
+  /screentime/weekly-summary:
+    get:
+      operationId: getWeeklyScreenTimeSummary
+      tags: [screentime]
+      summary: Get weekly screen time summary for a child
+      parameters:
+        - in: query
+          name: childId
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: Weekly summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeeklyScreenTimeSummary"
+
+  /tips:
+    get:
+      operationId: getTips
+      tags: [tips]
+      summary: Get parenting tips
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          required: false
+      responses:
+        "200":
+          description: List of parenting tips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ParentingTip"
+
+  /tips/daily:
+    get:
+      operationId: getDailyTip
+      tags: [tips]
+      summary: Get today's parenting tip
+      responses:
+        "200":
+          description: Daily tip
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ParentingTip"
+
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get dashboard summary for a child
+      parameters:
+        - in: query
+          name: childId
+          schema:
+            type: integer
+          required: false
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  /sms/send-reminder:
+    post:
+      operationId: sendSmsReminder
+      tags: [tips]
+      summary: Send (simulated) SMS reminder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SmsReminderBody"
+      responses:
+        "200":
+          description: SMS reminder simulated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SmsReminderResponse"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +515,431 @@ components:
       required:
         - status
 
+    RegisterBody:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        phone:
+          type: ["string", "null"]
+      required:
+        - name
+        - email
+        - password
+
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+        user:
+          $ref: "#/components/schemas/User"
+      required:
+        - token
+        - user
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+      required:
+        - id
+        - name
+        - email
+        - createdAt
+
+    Child:
+      type: object
+      properties:
+        id:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+        ageMonths:
+          type: integer
+        createdAt:
+          type: string
+      required:
+        - id
+        - userId
+        - name
+        - gender
+        - dateOfBirth
+        - ageMonths
+        - createdAt
+
+    CreateChildBody:
+      type: object
+      properties:
+        name:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+        userId:
+          type: integer
+      required:
+        - name
+        - gender
+        - dateOfBirth
+        - userId
+
+    UpdateChildBody:
+      type: object
+      properties:
+        name:
+          type: string
+        gender:
+          type: string
+        dateOfBirth:
+          type: string
+
+    NutritionTip:
+      type: object
+      properties:
+        id:
+          type: integer
+        ageGroup:
+          type: string
+        mealType:
+          type: string
+        foodName:
+          type: string
+        foodNameAm:
+          type: string
+        description:
+          type: string
+        calories:
+          type: ["integer", "null"]
+      required:
+        - id
+        - ageGroup
+        - mealType
+        - foodName
+        - foodNameAm
+        - description
+
+    MealPlan:
+      type: object
+      properties:
+        ageGroup:
+          type: string
+        breakfast:
+          type: array
+          items:
+            $ref: "#/components/schemas/NutritionTip"
+        lunch:
+          type: array
+          items:
+            $ref: "#/components/schemas/NutritionTip"
+        dinner:
+          type: array
+          items:
+            $ref: "#/components/schemas/NutritionTip"
+      required:
+        - ageGroup
+        - breakfast
+        - lunch
+        - dinner
+
+    Vaccination:
+      type: object
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        vaccineName:
+          type: string
+        vaccineNameAm:
+          type: string
+        scheduledAge:
+          type: string
+        scheduledDate:
+          type: ["string", "null"]
+        completedDate:
+          type: ["string", "null"]
+        status:
+          type: string
+        notes:
+          type: ["string", "null"]
+      required:
+        - id
+        - childId
+        - vaccineName
+        - vaccineNameAm
+        - scheduledAge
+        - status
+
+    CreateVaccinationBody:
+      type: object
+      properties:
+        childId:
+          type: integer
+        vaccineName:
+          type: string
+        vaccineNameAm:
+          type: string
+        scheduledAge:
+          type: string
+        scheduledDate:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+      required:
+        - childId
+        - vaccineName
+        - vaccineNameAm
+        - scheduledAge
+
+    UpdateVaccinationBody:
+      type: object
+      properties:
+        completedDate:
+          type: ["string", "null"]
+        status:
+          type: string
+        notes:
+          type: ["string", "null"]
+
+    VaccinationScheduleItem:
+      type: object
+      properties:
+        vaccineName:
+          type: string
+        vaccineNameAm:
+          type: string
+        scheduledAge:
+          type: string
+        description:
+          type: string
+        doses:
+          type: integer
+      required:
+        - vaccineName
+        - vaccineNameAm
+        - scheduledAge
+        - description
+        - doses
+
+    GrowthRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        date:
+          type: string
+        heightCm:
+          type: number
+        weightKg:
+          type: number
+        ageMonths:
+          type: integer
+        notes:
+          type: ["string", "null"]
+      required:
+        - id
+        - childId
+        - date
+        - heightCm
+        - weightKg
+        - ageMonths
+
+    CreateGrowthRecordBody:
+      type: object
+      properties:
+        childId:
+          type: integer
+        date:
+          type: string
+        heightCm:
+          type: number
+        weightKg:
+          type: number
+        ageMonths:
+          type: integer
+        notes:
+          type: ["string", "null"]
+      required:
+        - childId
+        - date
+        - heightCm
+        - weightKg
+        - ageMonths
+
+    ScreenTimeRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+        childId:
+          type: integer
+        date:
+          type: string
+        minutes:
+          type: integer
+        limitMinutes:
+          type: integer
+        exceeded:
+          type: boolean
+      required:
+        - id
+        - childId
+        - date
+        - minutes
+        - limitMinutes
+        - exceeded
+
+    CreateScreenTimeBody:
+      type: object
+      properties:
+        childId:
+          type: integer
+        date:
+          type: string
+        minutes:
+          type: integer
+        limitMinutes:
+          type: integer
+      required:
+        - childId
+        - date
+        - minutes
+        - limitMinutes
+
+    WeeklyScreenTimeSummary:
+      type: object
+      properties:
+        childId:
+          type: integer
+        weekTotal:
+          type: integer
+        dailyAverage:
+          type: integer
+        daysExceeded:
+          type: integer
+        records:
+          type: array
+          items:
+            $ref: "#/components/schemas/ScreenTimeRecord"
+      required:
+        - childId
+        - weekTotal
+        - dailyAverage
+        - daysExceeded
+        - records
+
+    ParentingTip:
+      type: object
+      properties:
+        id:
+          type: integer
+        category:
+          type: string
+        title:
+          type: string
+        titleAm:
+          type: string
+        content:
+          type: string
+        contentAm:
+          type: string
+        ageGroup:
+          type: ["string", "null"]
+      required:
+        - id
+        - category
+        - title
+        - titleAm
+        - content
+        - contentAm
+
+    DashboardSummary:
+      type: object
+      properties:
+        child:
+          $ref: "#/components/schemas/Child"
+        upcomingVaccinations:
+          type: integer
+        completedVaccinations:
+          type: integer
+        latestGrowth:
+          $ref: "#/components/schemas/GrowthRecord"
+        todayScreenTime:
+          type: integer
+        screenTimeLimit:
+          type: integer
+        screenTimeExceeded:
+          type: boolean
+        dailyTip:
+          $ref: "#/components/schemas/ParentingTip"
+        recentNutritionPlan:
+          type: string
+      required:
+        - child
+        - upcomingVaccinations
+        - completedVaccinations
+        - todayScreenTime
+        - screenTimeLimit
+        - screenTimeExceeded
+        - recentNutritionPlan
+
+    SmsReminderBody:
+      type: object
+      properties:
+        phone:
+          type: string
+        message:
+          type: string
+        childId:
+          type: integer
+      required:
+        - phone
+        - message
+
+    SmsReminderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        loggedAt:
+          type: string
+      required:
+        - success
+        - message
+        - loggedAt
